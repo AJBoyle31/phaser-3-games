@@ -1,0 +1,51 @@
+https://browsergameshub.com/how-to-create-mobile-game-phaser-3/
+
+https://phasergames.com/ - great resource, lots of helpful info
+
+Game Plan:
+    - set up Spaceship game
+        - asteroid/shot collision - DONE
+        - asteroid/ship collision - DONE
+        - restart game on spacebar press (needs text too) - DONE
+        - add high score to top right - have it update - DONE
+        - as score gets higher, throttle shots and increase astroid speed - DONE
+        - 
+    - set up Menu for game selection
+        - work on tweens for either starfield or spaceship
+        
+    
+    
+    
+Need to understand Phaser.Math.GetSpeed(300,1) and the Class i set up
+https://rexrainbow.github.io/phaser3-rex-notes/docs/site/image/
+https://labs.phaser.io/edit.html?src=src/pools/bullets.js
+https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Image.html
+
+
+Can pass data to scene, get data from create() function
+
+Cat Fighter (https://opengameart.org/content/cat-fighter-sprite-sheet) & (https://opengameart.org/content/cat-fighter-addon1-energy-force-master-kit)
+    - 50x50px (i think)
+        In effect sprite sheet
+        - small effect = 1 fame is 32 * 32 pixel 
+        - big effect = 1 fame is 64 * 64 pixel  
+    - set up basic platform
+    - figure out animaitons
+    
+    
+    jumping: http://www.html5gamedevs.com/topic/37699-jump-animation-while-the-character-is-jumping/
+    https://github.com/nkholski/phaser3-es6-webpack/blob/master/src/sprites/Mario.js
+    https://browsergameshub.com/endlesscave08-sprite-animations-mobile-games-phaser3/
+    
+    
+    
+    
+    spaceShooter - https://yorkcs.com/2019/02/06/build-a-space-shooter-with-phaser-3/ - assets loaded into folder
+    
+Animation Controller - http://johnstejskal.com/wp/creating-2d-animations-from-sprite-sheets-in-unity3d-pt2/
+
+default state = idle
+    idle => walk && walk => idle
+    idle => jump && jump => idle
+    walk => jump NOT jump => walk
+    

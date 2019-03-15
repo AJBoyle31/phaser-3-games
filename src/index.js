@@ -1,34 +1,44 @@
 import 'phaser';
+import Boot from './scenes/boot.js';
+import Preload from './scenes/preload.js';
+import Menu from './scenes/menu.js';
+import DudeTutorial from './scenes/dudeTutorial.js';
+import SpaceshipGame from './scenes/spaceshipGame.js';
+import CatFighter from './scenes/catFighter.js';
+import SpaceShooter from './scenes/spaceShooter.js';
+import SpaceShooterGameOver from './scenes/spaceShooterGameOver.js';
 
 var config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
     width: 800,
     height: 600,
-    scene: {
-        preload: preload,
-        create: create
-    }
+    //backgroundColor: 'black',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: {x: 0, y: 300},
+            debug: true
+        }
+    },
+    pixelArt: true,
+    roundPixels: true,
+    scene: [Boot, Preload, Menu, SpaceShooter, SpaceShooterGameOver, DudeTutorial, SpaceshipGame, CatFighter]
 };
 
-var game = new Phaser.Game(config);
+new Phaser.Game(config);
 
-function preload ()
-{
-    this.load.image('logo', 'assets/logo.png');
-}
 
-function create ()
-{
-    var logo = this.add.image(400, 150, 'logo');
-
-    this.tweens.add({
-        targets: logo,
-        y: 450,
-        duration: 2000,
-        ease: 'Power2',
-        yoyo: true,
-        loop: -1
-    });
-
-}
+/*
+type: Phaser.AUTO,
+    parent: 'phaser-example',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: true
+        }
+    },
+    width: 800,
+    height: 600,
+*/
