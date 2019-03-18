@@ -36,6 +36,9 @@ class Cat extends Phaser.GameObjects.Sprite {
     }
     
     update(time, delta){
+        
+        //console.log(this.movement);
+        
         if (!this.alive){
             return;
         }
@@ -69,26 +72,29 @@ class Cat extends Phaser.GameObjects.Sprite {
         //console.log(this.anims.getCurrentKey());
         
         //Cat Controller
+        /*
+        if (this.catMove){
+            this.flipX ? this.body.setVelocityX(-this.speed) : this.body.setVelocityX(this.speed);
+        }
+        */
         
+        if (this.movement){
             if (this.cursors.left.isDown){
-                if (this.movement){
-                    this.body.setVelocityX(-this.speed);
-                    this.flipX = true;    
-                }
+                this.body.setVelocityX(-this.speed);
+                this.flipX = true;    
             }
             else if (this.cursors.right.isDown){
-                if (this.movement){
-                    this.body.setVelocityX(this.speed);
-                    this.flipX = false;    
-                }
+                this.body.setVelocityX(this.speed);
+                this.flipX = false;    
             } 
             else {
                 this.idle();
             }
-            
-            if (this.cursors.up.isDown && !this.attacking && this.body.touching.down){
-                this.jump();    
-            }
+        }
+        
+        if (this.cursors.up.isDown && !this.attacking && this.body.touching.down){
+            this.jump();    
+        }
         
         
         if (this.keyQ.isDown){
@@ -136,14 +142,13 @@ class Cat extends Phaser.GameObjects.Sprite {
         this.body.setVelocityX(0);
     }
     
-    
-    
     jump(){
         this.body.setVelocityY(this.jumpSpeed);
     }
     
     attackMove(key){
         if(!this.attacking && !this.jumping){
+            this.body.setVelocityX(0);
             this.movement = false;
             this.attacking = true;
             this.idle();
@@ -187,9 +192,11 @@ class Cat extends Phaser.GameObjects.Sprite {
                 break;
             case 'Flyingkick':
                 this.play('catFlyingkick', true);
+                this.body.setVelocityX(this.flipX ? -this.speed : this.speed);
                 this.on('animationcomplete-cat' + key, () => {
                     this.movement = true;
                     this.attacking = false;
+                    this.catMove = false;
                 });
                 break;
             case 'Spin':
