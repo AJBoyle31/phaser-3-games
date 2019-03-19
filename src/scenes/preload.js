@@ -174,19 +174,19 @@ class Preload extends Phaser.Scene {
         
         this.anims.create({
             key: 'catSpin',
-            frames: this.anims.generateFrameNames('cat', {prefix: 'spin', zeropad: 2, start: 1, end: 11}),
+            frames: this.anims.generateFrameNames('cat', {prefix: 'spin', start: 11, end: 20}),
             frameRate: 7
         });
         
         this.anims.create({
             key: 'catUppercut',
-            frames: this.anims.generateFrameNames('cat', {prefix: 'uppercut', zeropad: 2, start: 1, end: 13}),
+            frames: this.anims.generateFrameNames('cat', {prefix: 'uppercut', start: 11, end: 23}),
             frameRate: 7
         });
         
         this.anims.create({
             key: 'catCombo',
-            frames: this.anims.generateFrameNames('cat', {prefix: 'combo', zeropad: 2, end: 11}),
+            frames: this.anims.generateFrameNames('cat', {prefix: 'combo', start: 11, end: 20}),
             frameRate: 7
         });
         

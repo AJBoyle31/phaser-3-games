@@ -28,18 +28,10 @@ class CatFighter extends Phaser.Scene {
     }
     
     update(){
-        
-        
+    
         this.cat.update();
         
     }
-    /*
-    catLanding(){
-        this.airborne = false;
-        this.cat.anims.play('catLand', true);
-        console.log(this.airborne);
-    }
-    */
 }
 
 export default CatFighter;
