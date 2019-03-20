@@ -1,4 +1,4 @@
-class Cat extends Phaser.GameObjects.Sprite {
+export class Cat extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame){
         super(scene, x, y, 'cat', frame);
         this.scene = scene;
@@ -80,7 +80,7 @@ class Cat extends Phaser.GameObjects.Sprite {
                 this.flipX = false;    
             } 
             else {
-                this.idle();
+                this.idle();    
             }
         }
         
@@ -139,12 +139,22 @@ class Cat extends Phaser.GameObjects.Sprite {
         
         //catUppercut jump
         if (this.anims.getCurrentKey() == 'catUppercut' && this.anims.getProgress() > 0.4 && this.body.touching.down){
-            this.body.setVelocityY(-100);
-            this.anims.pause();
-            
-        } 
+            this.body.setVelocityY(-140);
+            //this.anims.pause();
+        }
+        
+        //catSpin forward motion
+        if (this.anims.getCurrentKey() == 'catSpin' && this.anims.getProgress() > 0.3){
+            this.body.setVelocityX(this.flipX ? -this.speed : this.speed);
+        }
+        if (this.anims.getCurrentKey() == 'catSpin' && this.anims.getProgress() > 0.85){
+            this.body.setVelocityX(0);
+        }
+        
+        
         
     }
+    //END UPDATE
     
     idle(){
         this.body.setVelocityX(0);
@@ -198,7 +208,6 @@ class Cat extends Phaser.GameObjects.Sprite {
                 this.on('animationcomplete-cat' + key, () => {
                     this.movement = true;
                     this.attacking = false;
-                    this.catMove = false;
                 });
                 break;
             case 'Spin':
@@ -278,4 +287,10 @@ class Cat extends Phaser.GameObjects.Sprite {
 
 }
 
-export default Cat;
+
+class CatFireball extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y){
+        super(scene, x, y, 'catFireball');
+        this.body.setVelocityX(200);
+    }    
+}

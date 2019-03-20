@@ -181,7 +181,7 @@ class Preload extends Phaser.Scene {
         this.anims.create({
             key: 'catUppercut',
             frames: this.anims.generateFrameNames('cat', {prefix: 'uppercut', start: 11, end: 23}),
-            frameRate: 7
+            frameRate: 10
         });
         
         this.anims.create({

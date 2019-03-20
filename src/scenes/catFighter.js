@@ -1,4 +1,4 @@
-import Cat from '../sprites/cat.js';
+import {Cat} from '../sprites/cat.js';
 
 class CatFighter extends Phaser.Scene {
     constructor(){
@@ -22,8 +22,8 @@ class CatFighter extends Phaser.Scene {
         
         this.cat = new Cat(this, 100, 400, 'cat');
         
+        this.catFireballs = this.add.group();
         
-    
         this.physics.add.collider(this.cat, this.platforms);
     }
     
