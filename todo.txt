@@ -29,8 +29,10 @@ Cat Fighter (https://opengameart.org/content/cat-fighter-sprite-sheet) & (https:
         In effect sprite sheet
         - small effect = 1 fame is 32 * 32 pixel 
         - big effect = 1 fame is 64 * 64 pixel  
-    - set up basic platform
-    - figure out animaitons
+    - Need to move sprite to container to be able to add hit boxes
+        - http://www.html5gamedevs.com/topic/14840-separate-hitboxes-for-attack-animations/
+    - Add fireball json
+    - Add fireball group to sprite (might work best after container is figured out)
     
     
     jumping: http://www.html5gamedevs.com/topic/37699-jump-animation-while-the-character-is-jumping/
@@ -48,4 +50,7 @@ default state = idle
     idle => walk && walk => idle
     idle => jump && jump => idle
     walk => jump NOT jump => walk
+    
+    
+
     
