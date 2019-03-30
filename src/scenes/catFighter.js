@@ -20,7 +20,8 @@ class CatFighter extends Phaser.Scene {
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
         
-        this.cat = new Cat(this, 100, 400, 'cat');
+        //this.cat = new Cat(this, 100, 400, 'cat');
+        var container = new Cat(this, 100, 400);
         
         this.catFireballs = this.add.group();
         
@@ -29,7 +30,7 @@ class CatFighter extends Phaser.Scene {
     
     update(){
     
-        this.cat.update();
+        //this.cat.update();
         
     }
 }

@@ -1,16 +1,32 @@
-export class Cat extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame){
-        super(scene, x, y, 'cat', frame);
+export class Cat extends Phaser.GameObjects.Container {
+    constructor(scene, x, y){
+        
+        const cat = scene.add.sprite(0, 0, 'cat');
+        const attackArea = new Phaser.Geom.Circle(0, 0, 60);
+        //const attackB = config.scene.add.sprite(0, 0, null);
+        
+        super(scene, x, y, [cat, attackArea]);
+        
+        this.scene.add.container(this);
+        
+        this.scene.physics.world.enable(this);
+        this.scene.add.existing(this);
+        /*
         this.scene = scene;
         this.scene.add.existing(this);
         this.scene.physics.world.enableBody(this);
         this.body.setCollideWorldBounds(true);
+        */
+        
+        //Config
         this.alive = true;
         this.speed = 75;
         this.jumpSpeed = -330;
         this.setScale(2);
         this.body.setSize(12, 26);
         this.body.setOffset(24, 28);
+        this.cat = cat;
+        this.attackArea = attackArea;
         
         //player animation checkers
         this.movement = true;
