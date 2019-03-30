@@ -17,6 +17,10 @@ export class Cat extends Phaser.GameObjects.Sprite {
         this.jumping = false;
         this.attacking = false;
         
+        //hit boxes
+        this.midKick = false;
+        
+        
         //controls
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -96,28 +100,36 @@ export class Cat extends Phaser.GameObjects.Sprite {
             this.attackMove('Fastshot');
         }
         if (this.keyE.isDown){
-            this.attackMove('Flyingkick');
-        }
-        if (this.keyR.isDown){
-            this.attackMove('Spin');
-        }
-        if (this.keyT.isDown){
-            this.attackMove('Punch');
+            this.attackMove('Uppercut');
         }
         if (this.keyA.isDown){
-            this.attackMove('Uppercut');
+            this.attackMove('Roundkick');
         }
         if (this.keyS.isDown){
             this.attackMove('Flyingkick');
         }
         if (this.keyD.isDown){
-            this.attackMove('Lowkick');
-        }
-        if (this.keyF.isDown){
             this.attackMove('Midkick');
         }
-        if (this.keyG.isDown){
+        if (this.keyZ.isDown){
+            this.attackMove('Spin');
+        }
+        if (this.keyX.isDown){
             this.attackMove('Combo');
+        }
+        if (this.keyC.isDown){
+            this.attackMove('Twoside');
+        }
+        
+        /*
+        if (this.keyV.isDown){
+            this.attackMove('Roundkick');
+        }
+        if (this.keyT.isDown){
+            this.attackMove('Punch');
+        }
+        if (this.keyD.isDown){
+            this.attackMove('Lowkick');
         }
         if (this.keyZ.isDown){
             this.attackMove('Highkick');
@@ -125,12 +137,9 @@ export class Cat extends Phaser.GameObjects.Sprite {
         if (this.keyX.isDown){
             this.attackMove('Downkick');
         }
-        if (this.keyC.isDown){
-            this.attackMove('Twoside');
-        }
-        if (this.keyV.isDown){
-            this.attackMove('Roundkick');
-        }
+
+        */
+        
         
         //catFlyingkick forward motion
         if (this.anims.getCurrentKey() == 'catFlyingkick' && this.anims.getProgress() > 0.5){
@@ -149,6 +158,15 @@ export class Cat extends Phaser.GameObjects.Sprite {
         }
         if (this.anims.getCurrentKey() == 'catSpin' && this.anims.getProgress() > 0.85){
             this.body.setVelocityX(0);
+        }
+        
+        //midkick hitbox
+        if (this.midKick){
+            this.body.setSize(26, 26);
+            this.body.setOffset(24, 28);
+        } else {
+            this.body.setSize(12, 26);
+            this.body.setOffset(24, 28);
         }
         
         
@@ -239,10 +257,12 @@ export class Cat extends Phaser.GameObjects.Sprite {
                 });
                 break;
             case 'Midkick':
+                this.midKick = true;
                 this.play('catMidkick', true);
                 this.on('animationcomplete-cat' + key, () => {
                     this.movement = true;   
                     this.attacking = false;
+                    this.midKick = false;
                 });
                 break;
             case 'Highkick':
