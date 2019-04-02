@@ -1,11 +1,13 @@
 export class Cat extends Phaser.GameObjects.Container {
     constructor(config){
         
-        const cat = config.scene.add.sprite(32, 32, 'cat');
+        const cat = config.scene.add.sprite(0, 0, 'cat');
         //const attackArea = new Phaser.Geom.Circle(0, 0, 60);
         //const attackB = config.scene.add.sprite(0, 0, null);
         
         super(config.scene, config.x, config.y, [cat]);
+        
+        this.setSize(12, 26);
         
         config.scene.add.container(this);
         //this.setInteractive(new Phaser.Geom.Circle(this.x, this.y, 10), Phaser.Geom.Circle.Contains);
@@ -13,12 +15,7 @@ export class Cat extends Phaser.GameObjects.Container {
         config.scene.physics.world.enable(this);
         config.scene.add.existing(this);
         
-        /*
-        this.scene = scene;
-        this.scene.add.existing(this);
-        this.scene.physics.world.enableBody(this);
-        this.body.setCollideWorldBounds(true);
-        */
+        this.graphics = config.graphics;
         
         //Config
         this.alive = true;
@@ -26,8 +23,8 @@ export class Cat extends Phaser.GameObjects.Container {
         this.jumpSpeed = -330;
         this.setScale(2);
         this.cat = cat;
-        this.body.setSize(12, 26);
-        //this.body.setOffset(24, 28);
+        //this.body.setSize(12, 26);
+        this.body.setOffset(-1, 9);
         //this.attackArea = attackB;
         
         //player animation checkers
@@ -63,17 +60,14 @@ export class Cat extends Phaser.GameObjects.Container {
         }
         
         this.on('pointerover', function(){
-            if (this.setInteractive()){
                 this.cat.setTint(0x44ff44);    
-            }
-            
         });
         
         //Cat facing direction and physics body
         if (this.cat.flipX){
-            this.body.setOffset(28, 28);
+            this.body.setOffset(1, 9);
         } else {
-            this.body.setOffset(24, 28);
+            this.body.setOffset(-1, 9);
         }
         
         //Animations Controller
@@ -165,7 +159,7 @@ export class Cat extends Phaser.GameObjects.Container {
         
         //catFlyingkick forward motion
         if (this.cat.anims.getCurrentKey() == 'catFlyingkick' && this.cat.anims.getProgress() > 0.5){
-            this.body.setVelocityX(this.flipX ? -this.speed : this.speed);
+            this.body.setVelocityX(this.cat.flipX ? -this.speed : this.speed);
         }
         
         //catUppercut jump
@@ -236,11 +230,16 @@ export class Cat extends Phaser.GameObjects.Container {
                 break;
             case 'Flyingkick':
                 this.cat.play('catFlyingkick', true);
-                this.setInteractive(new Phaser.Geom.Circle(this.cat.x, this.cat.y, 10), Phaser.Geom.Circle.Contains);
+                this.setInteractive(new Phaser.Geom.Circle(this.cat.x, this.cat.y, 30), Phaser.Geom.Circle.Contains);
+            
+                //  Just to display the hit area, not actually needed to work
+                this.graphics.lineStyle(2, 0x00ffff, 1);
+                this.graphics.strokeCircle(this.input.hitArea.x, this.input.hitArea.y, this.input.hitArea.radius);
+            
                 this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;
                     this.attacking = false;
-                    this.setInteractive(false);
+                    this.removeInteractive();
                     this.cat.clearTint();
                 });
                 break;
