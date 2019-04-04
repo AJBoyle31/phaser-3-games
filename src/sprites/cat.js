@@ -32,10 +32,6 @@ export class Cat extends Phaser.GameObjects.Container {
         this.jumping = false;
         this.attacking = false;
         
-        //hit boxes
-        this.midKick = false;
-        
-        
         //controls
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -142,6 +138,7 @@ export class Cat extends Phaser.GameObjects.Container {
             this.attackMove('Twoside');
         }
         
+        
         /*
         if (this.keyV.isDown){
             this.attackMove('Roundkick');
@@ -159,7 +156,6 @@ export class Cat extends Phaser.GameObjects.Container {
             this.attackMove('Downkick');
         }
         */
-
         
         //catFlyingkick forward motion
         if (this.cat.anims.getCurrentKey() == 'catFlyingkick' && this.cat.anims.getProgress() > 0.5){
@@ -178,15 +174,6 @@ export class Cat extends Phaser.GameObjects.Container {
         }
         if (this.cat.anims.getCurrentKey() == 'catSpin' && this.cat.anims.getProgress() > 0.85){
             this.body.setVelocityX(0);
-        }
-        
-        //midkick hitbox
-        if (this.midKick){
-            this.body.setSize(26, 26);
-            this.body.setOffset(24, 28);
-        } else {
-            this.body.setSize(12, 26);
-            this.body.setOffset(24, 28);
         }
         
         
@@ -285,12 +272,10 @@ export class Cat extends Phaser.GameObjects.Container {
                 });
                 break;
             case 'Midkick':
-                this.midKick = true;
-                this.play('catMidkick', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catMidkick', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;   
                     this.attacking = false;
-                    this.midKick = false;
                 });
                 break;
             case 'Highkick':
