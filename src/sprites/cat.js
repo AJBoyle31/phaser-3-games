@@ -1,16 +1,31 @@
-export class Cat extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame){
-        super(scene, x, y, 'cat', frame);
-        this.scene = scene;
-        this.scene.add.existing(this);
-        this.scene.physics.world.enableBody(this);
-        this.body.setCollideWorldBounds(true);
+export class Cat extends Phaser.GameObjects.Container {
+    constructor(config){
+        
+        const cat = config.scene.add.sprite(0, 0, 'cat');
+        //const attackArea = new Phaser.Geom.Circle(0, 0, 60);
+        //const attackB = config.scene.add.sprite(0, 0, null);
+        
+        super(config.scene, config.x, config.y, [cat]);
+        
+        this.setSize(12, 26);
+        
+        config.scene.add.container(this);
+        //this.setInteractive(new Phaser.Geom.Circle(this.x, this.y, 10), Phaser.Geom.Circle.Contains);
+        
+        config.scene.physics.world.enable(this);
+        config.scene.add.existing(this);
+        
+        this.graphics = config.graphics;
+        
+        //Config
         this.alive = true;
         this.speed = 75;
         this.jumpSpeed = -330;
         this.setScale(2);
-        this.body.setSize(12, 26);
-        this.body.setOffset(24, 28);
+        this.cat = cat;
+        //this.body.setSize(12, 26);
+        this.body.setOffset(-1, 9);
+        //this.attackArea = attackB;
         
         //player animation checkers
         this.movement = true;
@@ -37,7 +52,10 @@ export class Cat extends Phaser.GameObjects.Sprite {
         this.keyX = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         this.keyC = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
         this.keyV = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+        
+        
     }
+    
     
     update(time, delta){
         
@@ -45,11 +63,15 @@ export class Cat extends Phaser.GameObjects.Sprite {
             return;
         }
         
+        this.on('pointerover', function(){
+                this.cat.setTint(0x44ff44);    
+        });
+        
         //Cat facing direction and physics body
-        if (this.flipX){
-            this.body.setOffset(28, 28);
+        if (this.cat.flipX){
+            this.body.setOffset(1, 9);
         } else {
-            this.body.setOffset(24, 28);
+            this.body.setOffset(-1, 9);
         }
         
         //Animations Controller
@@ -77,11 +99,11 @@ export class Cat extends Phaser.GameObjects.Sprite {
         if (this.movement){
             if (this.cursors.left.isDown){
                 this.body.setVelocityX(-this.speed);
-                this.flipX = true;    
+                this.cat.flipX = true;    
             }
             else if (this.cursors.right.isDown){
                 this.body.setVelocityX(this.speed);
-                this.flipX = false;    
+                this.cat.flipX = false;    
             } 
             else {
                 this.idle();    
@@ -91,7 +113,6 @@ export class Cat extends Phaser.GameObjects.Sprite {
         if (this.cursors.up.isDown && !this.attacking && this.body.touching.down){
             this.jump();    
         }
-        
         
         if (this.keyQ.isDown){
             this.attackMove('Powershot');
@@ -137,26 +158,25 @@ export class Cat extends Phaser.GameObjects.Sprite {
         if (this.keyX.isDown){
             this.attackMove('Downkick');
         }
-
         */
-        
+
         
         //catFlyingkick forward motion
-        if (this.anims.getCurrentKey() == 'catFlyingkick' && this.anims.getProgress() > 0.5){
-            this.body.setVelocityX(this.flipX ? -this.speed : this.speed);
+        if (this.cat.anims.getCurrentKey() == 'catFlyingkick' && this.cat.anims.getProgress() > 0.5){
+            this.body.setVelocityX(this.cat.flipX ? -this.speed : this.speed);
         }
         
         //catUppercut jump
-        if (this.anims.getCurrentKey() == 'catUppercut' && this.anims.getProgress() > 0.4 && this.body.touching.down){
+        if (this.cat.anims.getCurrentKey() == 'catUppercut' && this.cat.anims.getProgress() > 0.4 && this.body.touching.down){
             this.body.setVelocityY(-140);
             //this.anims.pause();
         }
         
         //catSpin forward motion
-        if (this.anims.getCurrentKey() == 'catSpin' && this.anims.getProgress() > 0.3){
+        if (this.cat.anims.getCurrentKey() == 'catSpin' && this.cat.anims.getProgress() > 0.3){
             this.body.setVelocityX(this.flipX ? -this.speed : this.speed);
         }
-        if (this.anims.getCurrentKey() == 'catSpin' && this.anims.getProgress() > 0.85){
+        if (this.cat.anims.getCurrentKey() == 'catSpin' && this.cat.anims.getProgress() > 0.85){
             this.body.setVelocityX(0);
         }
         
@@ -199,59 +219,67 @@ export class Cat extends Phaser.GameObjects.Sprite {
         
         switch(key){
             case 'Idle':
-                this.play('catIdle', true);
+                this.cat.play('catIdle', true);
                 break;
             case 'Walk':
-                this.play('catWalk', true);
+                this.cat.play('catWalk', true);
                 break;
             case 'Jump':
-                this.play('catAir', true);
+                this.cat.play('catAir', true);
                 break;
             case 'Powershot':
-                this.play('catPowershot', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catPowershot', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;
                     this.attacking = false;
                 });
                 break;
             case 'Fastshot':
-                this.play('catFastshot', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catFastshot', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;   
                     this.attacking = false;
                 });
                 break;
             case 'Flyingkick':
-                this.play('catFlyingkick', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catFlyingkick', true);
+                this.setInteractive(new Phaser.Geom.Circle(this.cat.x, this.cat.y, 30), Phaser.Geom.Circle.Contains);
+            
+                //  Just to display the hit area, not actually needed to work
+                this.graphics.lineStyle(2, 0x00ffff, 1);
+                this.graphics.strokeCircle(this.input.hitArea.x, this.input.hitArea.y, this.input.hitArea.radius);
+            
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;
                     this.attacking = false;
+                    this.removeInteractive();
+                    this.cat.clearTint();
                 });
                 break;
             case 'Spin':
-                this.play('catSpin', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catSpin', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;   
                     this.attacking = false;
                 });
                 break;
             case 'Uppercut':
-                this.play('catUppercut', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catUppercut', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;    
                     this.attacking = false;
                 });
                 break;
             case 'Combo':
-                this.play('catCombo', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catCombo', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;    
                     this.attacking = false;
                 });
                 break;
             case 'Lowkick':
-                this.play('catLowkick', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catLowkick', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;   
                     this.attacking = false;
                 });
@@ -266,36 +294,36 @@ export class Cat extends Phaser.GameObjects.Sprite {
                 });
                 break;
             case 'Highkick':
-                this.play('catHighkick', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catHighkick', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;  
                     this.attacking = false;
                 });
                 break;
             case 'Downkick':
-                this.play('catDownkick', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catDownkick', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;  
                     this.attacking = false;
                 });
                 break;
             case 'Twoside':
-                this.play('catTwoside', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catTwoside', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;  
                     this.attacking = false;
                 });
                 break;
             case 'Roundkick':
-                this.play('catRoundkick', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catRoundkick', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;   
                     this.attacking = false;
                 });
                 break;
             case 'Punch':
-                this.play('catPunch', true);
-                this.on('animationcomplete-cat' + key, () => {
+                this.cat.play('catPunch', true);
+                this.cat.on('animationcomplete-cat' + key, () => {
                     this.movement = true;    
                     this.attacking = false;
                 });
@@ -307,10 +335,11 @@ export class Cat extends Phaser.GameObjects.Sprite {
 
 }
 
-
+/*
 class CatFireball extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y){
         super(scene, x, y, 'catFireball');
         this.body.setVelocityX(200);
     }    
 }
+*/
